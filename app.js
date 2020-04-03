@@ -1,6 +1,7 @@
 const express = require('express');
-const bodyParser = require('bodyParser');
+const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
+const chalk = require('chalk');
 
 const app = express();
 
