@@ -2,17 +2,34 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const chalk = require('chalk');
+const errorHandler = require('errorhandler');
+const mongoose = require('mongoose');
+
 
 const app = express();
+
+const apiController = require('./controllers/api');
 
 dotenv.config({ path: '.env' });
 
 /**
+ * Connect to MongoDB.
+ */
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useUnifiedTopology', true);
+mongoose.connect(process.env.MONGODB_URI);
+mongoose.connection.on('error', (err) => {
+  console.error(err);
+  console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
+  process.exit();
+});
+
+/**
  * Express configuration.
  */
-
 app.set('port', process.env.PORT || 8080);
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -22,6 +39,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
   res.send('Hello World! I am the Dreister API')
 })
+
+/**
+ * API routes.
+ */
+app.get('/api/profiles', apiController.getAllProfiles)
+app.post('/api/profile', apiController.createOrUpdateProfile)
+app.post('/api/profiles', apiController.createOrUpdateMultipleProfiles)
 
 
 /**
