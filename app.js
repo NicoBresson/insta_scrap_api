@@ -44,6 +44,7 @@ app.get('/', (req, res) => {
  * API routes.
  */
 app.get('/api/profiles', apiController.getAllProfiles)
+app.get('/api/profiles/update-followers', apiController.updateFollowerProfiles)
 app.post('/api/profile', apiController.createOrUpdateProfile)
 app.post('/api/profiles', apiController.createOrUpdateMultipleProfiles)
 
