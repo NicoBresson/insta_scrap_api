@@ -4,7 +4,7 @@ const { getFollowers } = require('../lib/scraperAPI')
 exports.getAllProfiles = async (req, res) => {
   try {
     const profiles = await Profile.find({});
-    res.json(profiles);
+    return res.json(profiles);
   } catch (error) {
     console.log(error)
   }
@@ -14,20 +14,21 @@ exports.getProfile = async (req, res) => {
   try {
     const instagramId = req.params.profileId
     const profile = await Profile.findOne({ instagramId });
-    res.json(profile);
+    return res.json(profile);
   } catch (error) {
     console.log(error)
   }
 }
 
-exports.updateFollowerProfiles = async (req, res) => {
+exports.scrapProfiles = async (req, res) => {
   try {
     const dataSetSize = await Profile.countDocuments();
-    const nbScraps = 50
-
+    const nbScraps = 20
+    console.log(`Going to do ${nbScraps} scraps`)
     for (let i = 0; i < nbScraps; i++) {
       const randomNumber = Math.floor(Math.random() * dataSetSize);
       const [profile] = await Profile.find().limit(1).skip(randomNumber);
+      console.log(profile)
       const data = await getFollowers(profile.instagramId);
       if (data && data.graphql && data.graphql.user) {
         const followers = data.graphql.user.edge_followed_by.count;
@@ -41,10 +42,9 @@ exports.updateFollowerProfiles = async (req, res) => {
       } else {
         console.log(`${profile.instagramId} skipped`)
       }
-
     }
     console.log(`Completed ${nbScraps} scraps`)
-    res.status('OK');
+    res.json({message:'Ok'});
   } catch (error) {
     console.log(error)
   }

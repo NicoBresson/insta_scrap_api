@@ -33,6 +33,12 @@ app.set('port', process.env.PORT || 8080);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+
+app.use('/*', function (req, res, next) {
+  console.log("A new request received to " + req.originalUrl);
+  next();
+});
+
 /**
  * Primary app routes.
  */
@@ -43,9 +49,9 @@ app.get('/', (req, res) => {
 /**
  * API routes.
  */
-app.get('/api/profile/:profileId',apiController.getProfile)
 app.get('/api/profiles', apiController.getAllProfiles)
-app.get('/api/profiles/update-followers', apiController.updateFollowerProfiles)
+app.get('/api/profiles/:profileId',apiController.getProfile)
+app.get('/api/update-followers', apiController.scrapProfiles)
 app.post('/api/profile', apiController.createOrUpdateProfile)
 app.post('/api/profiles', apiController.createOrUpdateMultipleProfiles)
 
