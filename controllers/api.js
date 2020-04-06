@@ -23,22 +23,21 @@ exports.getProfile = async (req, res) => {
 exports.scrapProfiles = async (req, res) => {
   try {
     const dataSetSize = await Profile.countDocuments();
-    const nbScraps = 20
+    const nbScraps = 2
     console.log(`Going to do ${nbScraps} scraps`)
     for (let i = 0; i < nbScraps; i++) {
       const randomNumber = Math.floor(Math.random() * dataSetSize);
       const [profile] = await Profile.find().limit(1).skip(randomNumber);
-      console.log(profile)
       const data = await getFollowers(profile.instagramId);
       if (data && data.graphql && data.graphql.user) {
         const followers = data.graphql.user.edge_followed_by.count;
         const followings = data.graphql.user.edge_follow.count;
         const isPrivate = data.graphql.user.is_private;
-        console.log(profile.instagramId, followers, followings, isPrivate);
         profile.nbFollowers = followers;
         profile.nbFollowing = followings;
         profile.privateProfile = isPrivate;
         await profile.save();
+        console.log(`${profile.instagramId} updated`)
       } else {
         console.log(`${profile.instagramId} skipped`)
       }

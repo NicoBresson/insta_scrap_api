@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const chalk = require('chalk');
 const errorHandler = require('errorhandler');
 const mongoose = require('mongoose');
+require ('./cron.js');
 
 
 const app = express();
