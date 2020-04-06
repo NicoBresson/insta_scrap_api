@@ -1,0 +1,19 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next -p 8080",
+    "start": "next",
+    "build": "next build"
+  },
+  "dependencies": {
+    "date-fns": "^2.11.1",
+    "next": "^9.3.4",
+    "node-fetch": "^2.6.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-number-format": "^4.4.1"
+  }
+}
