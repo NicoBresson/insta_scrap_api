@@ -16,28 +16,31 @@ function useRemainingScrapes() {
   return remainingScrapes
 }
 
+//custom hook!
 
 function useScrapes() {
-  const [scrapes, setScrapes] = useState([{ instagramId: '' }])
+  const [scrapes, setScrapes] = useState([{ instagramId: '', nbFollowers:0 }])
+
+  // fetch
+  async function fetchScrapes (){
+    const res = await fetch('http://localhost:3000/api/top100')
+    const data = await res.json()
+    setScrapes(data)
+  }
 
   // Use effect accept only a function as parameter
-  useEffect(function () {
-    (async () => {
-      console.log('Mounting or Updating')
-      const res = await fetch('http://localhost:3000/api/top100')
-      const data = await res.json()
-      setScrapes(data)
-    })()
+  useEffect(() => {
+      fetchScrapes()
   }, [])
-  return scrapes
+  return {scrapes,fetchScrapes}
 }
 
 const Page = ({ children }) => {
-  const scrapes = useScrapes();
+  const {scrapes, fetchScrapes} = useScrapes();
   const remainingScrapes = useRemainingScrapes();
   return (
     <ScrapeProvider value={
-      { scrapes, remainingScrapes }
+      { scrapes, fetchScrapes, remainingScrapes }
     }>
       <div className="page">
         {children}

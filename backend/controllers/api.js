@@ -43,7 +43,7 @@ exports.getProfile = async (req, res) => {
 exports.scrapProfiles = async (req, res) => {
   try {
     const dataSetSize = await Profile.countDocuments();
-    const nbScraps = 2
+    const nbScraps = 3
     console.log(`Going to do ${nbScraps} scraps`)
     for (let i = 0; i < nbScraps; i++) {
       const randomNumber = Math.floor(Math.random() * dataSetSize);

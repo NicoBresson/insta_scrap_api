@@ -6,7 +6,7 @@ const errorHandler = require('errorhandler');
 const mongoose = require('mongoose');
 const cors = require('cors');
 // Uncomment the next line to activate teh cron
-//require ('./cron.js');
+// require ('./cron.js');
 
 
 const app = express();
